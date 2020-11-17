@@ -115,7 +115,7 @@ class AnimalController {
                 location: {
                     $near: {
                         $geometry: {
-                            coordinates: [latitude, longitude]
+                            coordinates: [req.query.lat, req.query.lon]
                         },
                         $maxDistance: 10000
                     }
@@ -146,8 +146,7 @@ class AnimalController {
                 return res.status(200).json(results);
             }).catch(function (e) {
 
-                return res.sta
-                tus(200).json(e);
+                return res.status(400).json(e);
 
             })
         }
@@ -156,7 +155,6 @@ class AnimalController {
     getAnimalWithNotification() {
         return async function (req, res) {
 
-            console.log("Gustavo")
             let animal;
 
             try {
@@ -195,6 +193,29 @@ class AnimalController {
         }
     }
     
+    patchGeolocation() {
+        return async function (req, res) {
+
+            let code = req.body.code;
+            let location = {
+                type: 'Point',
+                coordinates: [req.body.lat, req.body.lon]
+            };
+
+            Animal.updateOne({
+                'code': code
+            }, {
+                $set: location
+            }).then(function (results) {
+
+                return res.status(200).json(results);
+            }).catch(function (e) {
+
+                return res.status(400).json(e);
+
+            })
+        }
+    }
 }
 
 
