@@ -10,7 +10,7 @@ const PointSchema = require('../../system/models/PointSchema');
 
 const animalSchema = new mongoose.Schema({
     code: Number,
-    statusMessage: Boolean,
+    notification: Boolean,
     type: String,
     infos: [],
     dtCreate: String,
@@ -30,7 +30,8 @@ class AnimalController {
 
         routes.getAnimal = "/animal/:code";
         routes.animal = "/animal";
-        routes.getAnimalByType = "/animal/:type"
+        routes.getAnimalByType = "/animal/:type";
+        routes.notifications = "/notifications";
 
         return routes;
     }
@@ -38,7 +39,7 @@ class AnimalController {
     setAnimal() {
         return async function (req, res) {
 
-            let code, status, type, infos, latitude, longitude, dtCreate, animal;
+            let code, notification, type, infos, latitude, longitude, dtCreate, animal;
 
             console.log(req.body.code, req.body.type, req.body.latitude, req.body.longitude);
             dtCreate = formattedDateTime(new Date());
@@ -57,8 +58,8 @@ class AnimalController {
                 });
             }
 
-            req.body.status ? status = req.body.status : status = false;
             infos[0]["location"] = [latitude, longitude];
+            notification = false;
 
             let location = {
                 type: 'Point',
@@ -67,7 +68,7 @@ class AnimalController {
 
             var obj = {
                 code,
-                status,
+                notification,
                 type,
                 infos,
                 dtCreate,
@@ -79,7 +80,7 @@ class AnimalController {
 
             } catch (e) {
 
-                Hermodr.error("controlleres/animal.js | Line 57", e);
+                Hermodr.error("controlleres/animal.js | Line 83", e);
             }
 
             return res.json(animal);
@@ -96,7 +97,7 @@ class AnimalController {
                     "code": req.params.code
                 }); //{code: req.code}
             } catch (e) {
-                Hermodr.error("controlleres/animal.js | Line 78", e);
+                Hermodr.error("controlleres/animal.js | Line 100", e);
             }
 
             return res.json(animal);
@@ -106,7 +107,7 @@ class AnimalController {
 
     getAnimal() {
         return async function (req, res) {
-            
+
             let latitude = req.query.lat;
             let longitude = req.query.lon;
 
@@ -120,27 +121,80 @@ class AnimalController {
                     }
                 }
             });
-            
+
             return res.json(animals);
         }
     }
 
-    pushUpdate() {
-        return async function(req, res){
-            
-            let code = req.params.code;
-            let infos = req.params.infos;
-            Animal.updateOne({ 'code' : code },{ $push: {"infos":infos} } ).then(function(results){
-        
-                return res.json(results);
-            }).catch(function(e){
-                
-                return res.json(results);
-                
+    patchInfos() {
+        return async function (req, res) {
+
+            let code = req.body.code;
+            let infos = req.body.infos;
+
+            Animal.updateOne({
+                'code': code
+            }, {
+                $set: {
+                    "notification": true
+                },
+                $push: {
+                    "infos": infos
+                }
+            }).then(function (results) {
+
+                return res.status(200).json(results);
+            }).catch(function (e) {
+
+                return res.sta
+                tus(200).json(e);
+
             })
         }
     }
 
+    getAnimalWithNotification() {
+        return async function (req, res) {
+
+            console.log("Gustavo")
+            let animal;
+
+            try {
+
+                animal = await Animal.find({
+                    "notification": true
+                });
+
+            } catch (e) {
+                Hermodr.error("controlleres/animal.js | Line 167", e);
+            }
+
+            return res.json(animal);
+        }
+    }
+
+    patchAnimalForNoNotification() {
+        return async function (req, res) {
+
+            let code = req.body.code;
+
+            Animal.updateOne({
+                'code': code
+            }, {
+                $set: {
+                    "notification": false
+                }
+            }).then(function (results) {
+
+                return res.status(200).json(results);
+            }).catch(function (e) {
+
+                return res.status(400).json(e);
+
+            })
+        }
+    }
+    
 }
 
 
