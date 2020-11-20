@@ -2,7 +2,7 @@
 
 Sistema para monitoramento de informações de animais da Agropecuária.
 
-
+Para melhor visualização do README.md recomendamos que acesse o github a seguir: https://github.com/GuHenrique/DSRPT21
 ### Dependencies and technologies used
 
 #### Technologies
@@ -47,9 +47,19 @@ Para iniciar o Servidor execute o comando abaixo:
  ```
 
 
-Para Testar a API
+### To test the API
 
 Instale o Insomnia : https://insomnia.rest/
+
+Importe o arquivo "AnimalTracking API.json" no insomnia
+Para importar seguir o Caminho abaixo:
+
+Selecionar o menu APPLICATION (canto superior esquerdo) > PREFERENCES
+Após abrir a janela selecionar a aba DATA e na sequencia IMPORT DATA e FROM FILE
+Somente selecionar o arquivo "AnimalTracking API.json" que está na pasta DSRPT21 e confirmar.
+
+
+Exemplos das APIs abaixo.
 
 
 Criar um Animal na Lista: POST http://localhost:3333/animal
