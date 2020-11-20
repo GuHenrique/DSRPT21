@@ -45,7 +45,7 @@ Caso deseje executar teste pode ser executado os dois comandos abaixo separadame
 ```
 npm run eslint //esse comando executa testes para erro de sintax
 
-npm test //Esse comando executa testes TDD
+npm test //Esse comando executar os testes TDD
 ```
 
 Para iniciar o Servidor execute o comando abaixo:
@@ -56,7 +56,7 @@ Para iniciar o Servidor execute o comando abaixo:
 
 ### To test the API
 
-Instale o Insomnia : https://insomnia.rest/
+Instale o Insomnia Core : https://insomnia.rest/
 
 Importe o arquivo "AnimalTracking API.json" no insomnia
 Para importar seguir o Caminho abaixo:
