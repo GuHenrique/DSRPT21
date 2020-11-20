@@ -38,7 +38,7 @@ abra a pasta DSRPT21 no terminal
 
 Execute o comando abaixo para instalar as dependencias.
 ```
-npm intall
+npm install
 ```
 
 Caso deseje executar teste pode ser executado os dois comandos abaixo separadamente.
