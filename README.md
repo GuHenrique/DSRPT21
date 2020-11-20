@@ -2,6 +2,13 @@
 
 Sistema para monitoramento de informações de animais da Agropecuária.
 
+Pensamos em uma API que seja universal por isso usamos o padrão RESTFULL para que ela possa ser usada com qualquer framework de Interface Gráfica.
+
+Fizemos de uma forma que seja simples Criar, Ver, Editar e pegar as notificações dos Animais cadastrados e até remove-los das notificações.
+
+Nossa sistema de Dados é de um banco não relacional assim podemos centralizar as informações dentro do proprio animal de uma forma mais simples.
+
+
 Para melhor visualização do README.md recomendamos que acesse o github a seguir: https://github.com/GuHenrique/DSRPT21
 ### Dependencies and technologies used
 
@@ -90,7 +97,10 @@ para isso basta trocar o CODIGO_DO_ANIMAL_AQUI por um codigo que vc criou.
 Ex:http://localhost:3333/animal/3
 
 Pegar Todos os Animais: GET http://localhost:3333/animal
-Retorna todos os annimais existentes no banco de dados.
+Retorna todos os animais existentes no banco de dados.
+Pode-se ser enviado um filtro para Tipo de animal, para isso usar Query params
+Ex: http://localhost:3333/animal?type=Ovino
+O filtro precisa estar escrito identico ao do registro (letras maiúsculas e minúsculas) 
 
 Atualizar as informações de um animal: PATCH http://localhost:3333/animal
 Enviar um Body do tipo JSON no formato abaixo.

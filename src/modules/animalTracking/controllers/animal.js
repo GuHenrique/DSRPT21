@@ -4,7 +4,7 @@ const {
 const {
     Hermodr
 } = require("../../../shared/sources/hermodr-cmd-express");
-//const { Animal } = require("../models/animal");
+
 const mongoose = require('mongoose');
 
 const animalSchema = new mongoose.Schema({
@@ -93,7 +93,11 @@ class AnimalController {
     getAnimal() {
         return async function (req, res) {
 
-            const animals = await Animal.find();
+            var search = {};
+
+            if(req.query.type) search.type = req.query.type;
+            
+            const animals = await Animal.find(search);
 
             return res.json(animals);
         }
