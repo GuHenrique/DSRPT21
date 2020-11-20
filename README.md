@@ -45,7 +45,7 @@ Caso deseje executar teste pode ser executado os dois comandos abaixo separadame
 ```
 npm run eslint //esse comando executa testes para erro de sintax
 
-npm test //Esse comando executa TDD
+npm test //Esse comando executa testes TDD
 ```
 
 Para iniciar o Servidor execute o comando abaixo:
