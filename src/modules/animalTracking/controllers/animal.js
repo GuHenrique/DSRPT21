@@ -6,18 +6,13 @@ const {
 } = require("../../../shared/sources/hermodr-cmd-express");
 //const { Animal } = require("../models/animal");
 const mongoose = require('mongoose');
-const PointSchema = require('../../system/models/PointSchema');
 
 const animalSchema = new mongoose.Schema({
     code: Number,
     notification: Boolean,
     type: String,
     infos: [],
-    dtCreate: String,
-    location: {
-        type: PointSchema,
-        index: '2dsphere'
-    }
+    dtCreate: String
 });
 
 const Animal = mongoose.model('Animal', animalSchema);
@@ -39,17 +34,14 @@ class AnimalController {
     setAnimal() {
         return async function (req, res) {
 
-            let code, notification, type, infos, latitude, longitude, dtCreate, animal;
+            let code, notification, type, infos, dtCreate, animal;
 
-            console.log(req.body.code, req.body.type, req.body.latitude, req.body.longitude);
             dtCreate = formattedDateTime(new Date());
 
-            if (req.body.code && req.body.code != "" || req.body.type && req.body.type != "" || req.body.latitude && req.body.latitude != "" || req.body.longitude && req.body.longitude != "") {
+            if (req.body.code && req.body.code != "" || req.body.type && req.body.type != "") {
 
                 code = req.body.code;
                 type = req.body.type;
-                latitude = req.body.latitude;
-                longitude = req.body.longitude;
                 infos = req.body.infos;
 
             } else {
@@ -58,21 +50,14 @@ class AnimalController {
                 });
             }
 
-            infos[0]["location"] = [latitude, longitude];
             notification = false;
-
-            let location = {
-                type: 'Point',
-                coordinates: [latitude, longitude]
-            };
 
             var obj = {
                 code,
                 notification,
                 type,
                 infos,
-                dtCreate,
-                location
+                dtCreate
             };
 
             try {
@@ -108,19 +93,7 @@ class AnimalController {
     getAnimal() {
         return async function (req, res) {
 
-            let latitude = req.query.lat;
-            let longitude = req.query.lon;
-
-            const animals = await Animal.find({
-                location: {
-                    $near: {
-                        $geometry: {
-                            coordinates: [req.query.lat, req.query.lon]
-                        },
-                        $maxDistance: 10000
-                    }
-                }
-            });
+            const animals = await Animal.find();
 
             return res.json(animals);
         }
@@ -193,29 +166,6 @@ class AnimalController {
         }
     }
     
-    patchGeolocation() {
-        return async function (req, res) {
-
-            let code = req.body.code;
-            let location = {
-                type: 'Point',
-                coordinates: [req.body.lat, req.body.lon]
-            };
-
-            Animal.updateOne({
-                'code': code
-            }, {
-                $set: location
-            }).then(function (results) {
-
-                return res.status(200).json(results);
-            }).catch(function (e) {
-
-                return res.status(400).json(e);
-
-            })
-        }
-    }
 }
 
 
